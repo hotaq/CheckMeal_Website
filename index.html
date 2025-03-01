@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Meal Check-in App</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Add TensorFlow.js for local food detection as fallback - using specific versions -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.8.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>ไหนนนกินข้าวยังงเอ่ยยย</h1>
+        
+        <div class="meal-time-status">
+            <div id="current-time" class="current-time"></div>
+            <div id="current-meal" class="meal-status"></div>
+        </div>
+        
+        <div class="upload-section">
+            <h2>อัปโหลดรูปภาพอาหาร</h2>
+            <form id="meal-form">
+                <div class="form-group">
+                    <input type="text" id="name" name="name" class="form__input" placeholder="ชื่ออาหาร" required>
+                    <label for="name" class="form__label">ชื่ออาหาร</label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="meal-photo">รูปภาพอาหาร:</label>
+                    <input type="file" id="meal-photo" name="meal-photo" accept="image/*" required>
+                    <div class="image-preview-container">
+                        <img id="image-preview" src="#" alt="ตัวอย่าง" style="display: none;">
+                    </div>
+                    <!-- Food detection feedback -->
+                    <div id="detection-feedback" class="detection-feedback">
+                        <div class="spinner"></div>
+                        <span id="detection-message">กำลังตรวจสอบรูปภาพอาหาร...</span>
+                    </div>
+                </div>
+                
+                <button type="submit" id="submit-btn">ส่งการเช็คอิน</button>
+                <div class="meal-times-info">
+                    <p>อนุญาตให้เช็คอินได้เฉพาะในช่วงเวลาอาหารเท่านั้น:</p>
+                    <ul>
+                        <li>มื้อเช้า: 6:00 - 10:00</li>
+                        <li>มื้อกลางวัน: 11:30 - 13.00 (เสาร์อาทิตย์หยุด-14.00)</li>
+                        <li>มื้อเย็น: 16:00 - 18:00</li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        
+        <div class="history-section">
+            <h2>ประวัติการเช็คอิน</h2>
+            <div id="history-container">
+                <!-- History items will be loaded here -->
+                <div class="loading">กำลังโหลดประวัติ...</div>
+            </div>
+        </div>
+    </div>
+    <div class="tag-list">
+        <div class="loop-slider" style="--duration:15951ms; --direction:normal;">
+            <div class="inner">
+                <!-- Tags will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+        function initClient() {
+            gapi.client.init({
+                apiKey: 'https://sheetdb.io/api/v1/v5hbma3pufbpy',
+                discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+            }).then(loadSheetsApi);
+        }
+
+        gapi.load('client', initClient);
+    </script>
+</body>
+</html>
